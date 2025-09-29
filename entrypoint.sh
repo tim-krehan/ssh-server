@@ -23,6 +23,9 @@ if [ ! -f /etc/ssh/ssh_host_rsa_key ] || [ ! -f /etc/ssh/ssh_host_ecdsa_key ] ||
     exit 1
 fi
 
+# Populate /home/ubuntu if necessary
+/usr/local/bin/populate_home.sh
+
 echo "Starting sshd..."
 # Check if AUTHORIZED_KEYS is set and configure authorized keys for ubuntu user
 if [ -n "$AUTHORIZED_KEYS" ]; then

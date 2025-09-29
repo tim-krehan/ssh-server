@@ -89,6 +89,10 @@ RUN mkdir -p /var/run/sshd && \
     usermod -aG sudo ubuntu && \
     echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# Add script to populate /home/ubuntu with default skeleton if necessary
+COPY populate_home.sh /usr/local/bin/populate_home.sh
+RUN chmod +x /usr/local/bin/populate_home.sh
+
 # Add entrypoint script to handle authorized keys and generate host keys at runtime
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
@@ -118,5 +122,9 @@ EXPOSE 22
 
 # Set entrypoint to handle authorized keys and run sshd
 USER root
+
+# Set default shell to bash for user ubuntu
+RUN usermod -s /bin/bash ubuntu
+
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/usr/sbin/sshd", "-D"]
