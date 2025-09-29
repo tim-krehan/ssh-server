@@ -47,6 +47,7 @@ RUN  set -eux; apt-get update && apt-get install -y \
     git \
     vim \
     openssh-server \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
@@ -84,7 +85,9 @@ RUN set -eux; \
 RUN mkdir -p /var/run/sshd && \
     echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
     echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config && \
-    echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
+    echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config && \
+    usermod -aG sudo ubuntu && \
+    echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Add entrypoint script to handle authorized keys and generate host keys at runtime
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
@@ -112,6 +115,7 @@ LABEL GOLANG_VERSION=${GOLANG_VERSION} \
       PYTHON_VERSION=${PYTHON_VERSION}
 
 EXPOSE 22
+
 # Set entrypoint to handle authorized keys and run sshd
 USER root
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
