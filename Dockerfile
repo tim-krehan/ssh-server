@@ -46,6 +46,7 @@ RUN  set -eux; apt-get update && apt-get install -y \
     curl \
     git \
     vim \
+    openssh-server \
     && rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
@@ -56,8 +57,11 @@ RUN set -eux; \
     chmod +x /usr/local/bin/argocd && \
     # Install Go
     curl -fsSL https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz && \
-    ln -s /usr/local/go/bin/go /usr/bin/go &&\
+    ln -s /usr/local/go/bin/go /usr/bin/go && \
     mkdir -p /go/bin && chmod -R 777 /go && chown -R ubuntu:ubuntu /go && \
+    # Fix Python symlinks for compatibility
+    ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 && \
+    ln -sf /usr/bin/python${PYTHON_VERSION%%.*}-pip /usr/bin/pip3 && \
     # Install Helm, Helmify, kustomize, kubectl, stern
     curl -fsSL https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar -xz && mv linux-amd64/helm /usr/local/bin/helm && \
     curl -fsSL https://github.com/arttor/helmify/releases/download/v${HELMIFY_VERSION}/helmify_Linux_x86_64.tar.gz |tar -C /usr/local/bin/ -xz && \
@@ -76,11 +80,18 @@ RUN set -eux; \
     # Install GitHub CLI
     curl -fsSL https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_amd64.tar.gz | tar -xz -C /tmp && mv /tmp/gh_${GHCLI_VERSION}_linux_amd64/bin/gh /usr/bin/ && rm -rf /tmp/gh_${GHCLI_VERSION}_linux_amd64
 
-# Create SSH runtime directory and enable foreground mode
-RUN mkdir -p /etc/ssh && \
+# Ensure SSH runtime directory and proper configuration
+RUN mkdir -p /var/run/sshd && \
     echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
     echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config && \
     echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
+
+# Add entrypoint script to handle authorized keys and generate host keys at runtime
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Define a volume for SSH host keys
+VOLUME ["/etc/ssh"]
 
 # Switch back to the non-root user
 USER ubuntu
@@ -100,5 +111,8 @@ LABEL GOLANG_VERSION=${GOLANG_VERSION} \
       K9S_VERSION=${K9S_VERSION} \
       PYTHON_VERSION=${PYTHON_VERSION}
 
-# Set entrypoint to run sshd in foreground
+EXPOSE 22
+# Set entrypoint to handle authorized keys and run sshd
+USER root
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/usr/sbin/sshd", "-D"]
