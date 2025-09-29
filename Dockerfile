@@ -76,6 +76,12 @@ RUN set -eux; \
     # Install GitHub CLI
     curl -fsSL https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_amd64.tar.gz | tar -xz -C /tmp && mv /tmp/gh_${GHCLI_VERSION}_linux_amd64/bin/gh /usr/bin/ && rm -rf /tmp/gh_${GHCLI_VERSION}_linux_amd64
 
+# Create SSH runtime directory and enable foreground mode
+RUN mkdir -p /var/run/sshd && \
+    echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
+    echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config && \
+    echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
+
 # Switch back to the non-root user
 USER ubuntu
 
@@ -93,3 +99,6 @@ LABEL GOLANG_VERSION=${GOLANG_VERSION} \
       ARGOCD_VERSION=${ARGOCD_VERSION} \
       K9S_VERSION=${K9S_VERSION} \
       PYTHON_VERSION=${PYTHON_VERSION}
+
+# Set entrypoint to run sshd in foreground
+CMD ["/usr/sbin/sshd", "-D"]
