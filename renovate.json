@@ -9,7 +9,9 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["Dockerfile"],
+      "managerFilePatterns": [
+        "/Dockerfile/"
+      ],
       "matchStrings": [
         "#\\s*(?<datasource>[^:]+):(?<depName>[\\w\\-/]+)\\s*\\nARG\\s+\\w+_VERSION=(?<currentValue>[\\d\\.]+)"
       ],
