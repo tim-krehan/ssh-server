@@ -46,6 +46,7 @@ RUN  set -eux; apt-get update && apt-get install -y \
     curl \
     git \
     vim \
+    jq \
     openssh-server \
     sudo \
     && rm -rf /var/lib/apt/lists/*
