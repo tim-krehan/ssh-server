@@ -18,7 +18,7 @@ ARG KUBECTL_VERSION=1.33.2
 # github-releases:kubernetes-sigs/kustomize
 ARG KUSTOMIZE_VERSION=5.6.0
 # github-releases:PowerShell/PowerShell
-ARG POWERSHELL_VERSION=7.5.3
+ARG POWERSHELL_VERSION=7.5.4
 # managed manually
 ARG PYTHON_VERSION=3.12
 # github-releases:stern/stern
