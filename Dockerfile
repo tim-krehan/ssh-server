@@ -4,7 +4,7 @@ FROM ubuntu:24.04
 # github-releases:argoproj/argo-cd
 ARG ARGOCD_VERSION=3.1.9
 # github-releases:cli/cli
-ARG GHCLI_VERSION=2.82.0
+ARG GHCLI_VERSION=2.82.1
 # github-releases:golang/go
 ARG GOLANG_VERSION=1.24.4
 # github-releases:helm/helm
