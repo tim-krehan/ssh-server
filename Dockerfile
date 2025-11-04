@@ -2,7 +2,7 @@
 FROM ubuntu:24.04
 
 # github-releases:argoproj/argo-cd
-ARG ARGOCD_VERSION=3.1.9
+ARG ARGOCD_VERSION=3.2.0
 # github-releases:cli/cli
 ARG GHCLI_VERSION=2.82.1
 # github-releases:golang/go
