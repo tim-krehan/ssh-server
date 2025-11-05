@@ -24,7 +24,7 @@ ARG PYTHON_VERSION=3.12
 # github-releases:stern/stern
 ARG STERN_VERSION=1.32.0
 # github-releases:hashicorp/terraform
-ARG TERRAFORM_VERSION=1.13.4
+ARG TERRAFORM_VERSION=1.13.5
 # github-releases:terraform-linters/tflint
 ARG TFLINT_VERSION=0.59.1
 
