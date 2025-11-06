@@ -10,7 +10,7 @@ ARG GOLANG_VERSION=1.24.4
 # github-releases:helm/helm
 ARG HELM_VERSION=3.19.0
 # github-releases:arttor/helmify
-ARG HELMIFY_VERSION=0.4.18
+ARG HELMIFY_VERSION=0.4.19
 # github-releases:derailed/k9s
 ARG K9S_VERSION=0.50.16
 # managed manually, must match the cluster :)
