@@ -50,7 +50,7 @@ RUN set -eux; \
     iputils-ping \
     dnsutils \
     netcat-openbsd \
-    gpg;
+    gpg \
     openssh-server \
     sudo \
     && rm -rf /var/lib/apt/lists/*
