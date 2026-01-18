@@ -51,6 +51,7 @@ RUN set -eux; \
     dnsutils \
     netcat-openbsd \
     gpg \
+    ca-certificates \
     openssh-server \
     sudo \
     && rm -rf /var/lib/apt/lists/*
