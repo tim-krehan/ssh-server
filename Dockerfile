@@ -86,7 +86,7 @@ RUN set -eux; \
 RUN set -eux; \
     curl -fsSL https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz && \
     ln -s /usr/local/go/bin/go /usr/bin/go && \
-    mkdir -p /go/bin && chmod -R 777 /go && chown -R coder:coder /go
+    mkdir -p /go/bin && chmod -R 777 /go && chown -R ubuntu:ubuntu /go
 
 # Helm
 RUN set -eux; \
