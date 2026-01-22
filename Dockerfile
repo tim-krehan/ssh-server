@@ -21,8 +21,6 @@ ARG KREW_VERSION=0.4.5
 ARG KOMPOSE_VERSION=1.38.0
 # github-releases:kubernetes-sigs/kustomize
 ARG KUSTOMIZE_VERSION=5.6.0
-# github-releases:PowerShell/PowerShell
-ARG POWERSHELL_VERSION=7.5.4
 # github-tags:python/cpython
 ARG PYTHON_VERSION=3.14.2
 # github-releases:starship/starship
@@ -140,14 +138,9 @@ RUN set -eux; \
     mv tflint /usr/local/bin/ && \
     rm tflint.zip
 
-# Install PowerShell
-RUN set -eux; \
-    curl -fsSL https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell-${POWERSHELL_VERSION}-linux-x64.tar.gz |tar -xz -C /usr/local/bin/ && \
-    chmod +x /usr/local/bin/pwsh
-
 # Install Starship
 RUN set -eux; \
-    curl -sSL 'https://github.com/starship/starship/releases/download/v${STARSHIP_VERSION}/starship-x86_64-unknown-linux-musl.tar.gz' |tar -xz -C /usr/local/bin/
+    curl -sSL "https://github.com/starship/starship/releases/download/v${STARSHIP_VERSION}/starship-x86_64-unknown-linux-musl.tar.gz" |tar -xz -C /usr/local/bin/
 
 # Install GitHub CLI
 RUN set -eux; \
@@ -196,8 +189,8 @@ LABEL ARGOCD_VERSION=${ARGOCD_VERSION} \
       KREW_VERSION=${KREW_VERSION} \
       KOMPOSE_VERSION=${KOMPOSE_VERSION} \
       KUSTOMIZE_VERSION=${KUSTOMIZE_VERSION} \
-      POWERSHELL_VERSION=${POWERSHELL_VERSION} \
       PYTHON_VERSION=${PYTHON_VERSION} \
+      STARSHIP_VERSION=${STARSHIP_VERSION} \
       STERN_VERSION=${STERN_VERSION} \
       TERRAFORM_VERSION=${TERRAFORM_VERSION} \
       TFLINT_VERSION=${TFLINT_VERSION}
