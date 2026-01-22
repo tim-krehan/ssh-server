@@ -25,6 +25,8 @@ ARG KUSTOMIZE_VERSION=5.6.0
 ARG POWERSHELL_VERSION=7.5.4
 # github-tags:python/cpython
 ARG PYTHON_VERSION=3.14.2
+# github-releases:starship/starship
+ARG STARSHIP_VERSION=1.24.2
 # github-releases:stern/stern
 ARG STERN_VERSION=1.33.1
 # github-releases:hashicorp/terraform
@@ -70,7 +72,8 @@ RUN set -eux; \
     # Fix Python symlinks for compatibility
     ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 && \
     ln -sf /usr/bin/python${PYTHON_VERSION%%.*}-pip /usr/bin/pip3; \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
 
 # k9s
 RUN set -eux; \
@@ -139,13 +142,12 @@ RUN set -eux; \
 
 # Install PowerShell
 RUN set -eux; \
-    curl -fsSL https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell-${POWERSHELL_VERSION}-linux-x64.tar.gz | tar -xz -C /usr/local/bin/ && \
-    chmod +x /usr/local/bin/pwsh && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    curl -fsSL https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell-${POWERSHELL_VERSION}-linux-x64.tar.gz |tar -xz -C /usr/local/bin/ && \
+    chmod +x /usr/local/bin/pwsh
 
 # Install Starship
 RUN set -eux; \
-    curl -sS https://starship.rs/install.sh | sh -s -- --yes
+    curl -sSL 'https://github.com/starship/starship/releases/download/v${STARSHIP_VERSION}/starship-x86_64-unknown-linux-musl.tar.gz' |tar -xz -C /usr/local/bin/
 
 # Install GitHub CLI
 RUN set -eux; \
