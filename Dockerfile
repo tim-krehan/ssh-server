@@ -22,7 +22,7 @@ ARG KOMPOSE_VERSION=1.38.0
 # github-releases:kubernetes-sigs/kustomize
 ARG KUSTOMIZE_VERSION=5.6.0
 # github-tags:python/cpython
-ARG PYTHON_VERSION=3.14.2
+ARG PYTHON_VERSION=3.14.3
 # github-releases:starship/starship
 ARG STARSHIP_VERSION=1.24.2
 # github-releases:stern/stern
