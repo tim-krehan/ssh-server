@@ -16,7 +16,7 @@ ARG K9S_VERSION=0.50.18
 # github-tags:kubernetes/kubectl
 ARG KUBECTL_VERSION=1.34.2
 # github-releases:kubernetes-sigs/krew
-ARG KREW_VERSION=0.4.5
+ARG KREW_VERSION=0.5.0
 # github-releases:kubernetes/kompose
 ARG KOMPOSE_VERSION=1.38.0
 # github-releases:kubernetes-sigs/kustomize
