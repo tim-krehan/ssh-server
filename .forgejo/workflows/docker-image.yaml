@@ -54,7 +54,7 @@ jobs:
           git push origin "${{ env.NEW_VERSION }}"
 
       - name: Build and push Docker image (Buildx)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: ${{ forgejo.event_name != 'pull_request' }}
