@@ -24,7 +24,7 @@ ARG KUSTOMIZE_VERSION=5.6.0
 # github-tags:python/cpython
 ARG PYTHON_VERSION=3.14.4
 # github-releases:starship/starship
-ARG STARSHIP_VERSION=1.24.2
+ARG STARSHIP_VERSION=1.25.0
 # github-releases:stern/stern
 ARG STERN_VERSION=1.33.1
 # github-releases:hashicorp/terraform
