@@ -4,7 +4,7 @@ FROM ubuntu:24.04
 # github-releases:argoproj/argo-cd
 ARG ARGOCD_VERSION=3.3.8
 # github-releases:cli/cli
-ARG GHCLI_VERSION=2.90.0
+ARG GHCLI_VERSION=2.91.0
 # github-releases:hickford/git-credential-oauth
 ARG GIT_CREDENTIAL_OAUTH_VERSION=0.17.2
 # github-releases:golang/go
