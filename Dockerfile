@@ -54,24 +54,10 @@ RUN set -eux; \
     ca-certificates \
     openssh-server \
     sudo \
-    && rm -rf /var/lib/apt/lists/*
-
-# Python
-RUN set -eux; \
-    install -d /etc/apt/keyrings; \
-    curl -fsSL 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF23C5A6CF475977595C89F51BA6932366A755776' \
-      | gpg --dearmor -o /etc/apt/keyrings/deadsnakes.gpg; \
-    echo "deb [signed-by=/etc/apt/keyrings/deadsnakes.gpg] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu noble main" \
-      > /etc/apt/sources.list.d/deadsnakes.list; \
-    apt-get update && apt-get install -y \
-    python${PYTHON_VERSION%.*} \
+    python${PYTHON_VERSION%%.*} \
     python${PYTHON_VERSION%%.*}-venv \
-    python${PYTHON_VERSION%%.*}-pip && \
-    # Fix Python symlinks for compatibility
-    ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 && \
-    ln -sf /usr/bin/python${PYTHON_VERSION%%.*}-pip /usr/bin/pip3; \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
+    python${PYTHON_VERSION%%.*}-pip \
+    && rm -rf /var/lib/apt/lists/*
 
 # k9s
 RUN set -eux; \
