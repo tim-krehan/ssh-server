@@ -1,5 +1,5 @@
 # Use the base image for code-server
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 # github-releases:argoproj/argo-cd
 ARG ARGOCD_VERSION=3.3.8
