@@ -58,7 +58,7 @@ jobs:
           push: ${{ forgejo.event_name != 'pull_request' }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-${{ matrix.variant }}
-            ${{ env.REGISTRY }}/${{ env.NEW_VERSION }}-${{ matrix.variant }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NEW_VERSION }}-${{ matrix.variant }}
 
   tag_release:
     if: ${{ forgejo.event_name != 'pull_request' }}
