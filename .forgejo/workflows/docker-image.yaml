@@ -16,6 +16,10 @@ jobs:
   build_and_publish:
     runs-on: ubuntu-24.04
 
+    strategy:
+      matrix:
+        variant: [ "24.04", "26.04" ]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -57,7 +61,9 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
+          build-args: |
+            BASE_IMAGE=${{ matrix.variant }}
           push: ${{ forgejo.event_name != 'pull_request' }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NEW_VERSION }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-${{ matrix.variant }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NEW_VERSION }}-${{ matrix.variant }}
