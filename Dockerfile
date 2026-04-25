@@ -1,5 +1,7 @@
+ARG BASE_IMAGE=24.04
+
 # Use the base image for code-server
-FROM ubuntu:26.04
+FROM ubuntu:${BASE_IMAGE}
 
 # github-releases:argoproj/argo-cd
 ARG ARGOCD_VERSION=3.3.8
@@ -54,10 +56,27 @@ RUN set -eux; \
     ca-certificates \
     openssh-server \
     sudo \
-    python${PYTHON_VERSION%%.*} \
-    python${PYTHON_VERSION%%.*}-venv \
-    python${PYTHON_VERSION%%.*}-pip \
+    $( [ "${BASE_IMAGE}" = "26.04" ] && echo "python${PYTHON_VERSION%%.*} python${PYTHON_VERSION%%.*}-venv python${PYTHON_VERSION%%.*}-pip" ) \
     && rm -rf /var/lib/apt/lists/*
+
+# Python
+RUN if [ "${BASE_IMAGE}" = "24.04" ]; then \
+    set -eux; \
+    install -d /etc/apt/keyrings; \
+    curl -fsSL 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF23C5A6CF475977595C89F51BA6932366A755776' \
+      | gpg --dearmor -o /etc/apt/keyrings/deadsnakes.gpg; \
+    echo "deb [signed-by=/etc/apt/keyrings/deadsnakes.gpg] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu noble main" \
+      > /etc/apt/sources.list.d/deadsnakes.list; \
+    apt-get update && apt-get install -y \
+    python${PYTHON_VERSION%.*} \
+    python${PYTHON_VERSION%%.*}-venv \
+    python${PYTHON_VERSION%%.*}-pip && \
+    # Fix Python symlinks for compatibility
+    ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 && \
+    ln -sf /usr/bin/python${PYTHON_VERSION%%.*}-pip /usr/bin/pip3; \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean; \
+fi
 
 # k9s
 RUN set -eux; \
@@ -145,6 +164,9 @@ RUN mkdir -p /var/run/sshd && \
     echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config && \
     usermod -aG sudo ubuntu && \
     echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Remove systemd OSC context script that messes up the shell prompt in some terminals
+RUN rm -f /etc/profile.d/80-systemd-osc-context.sh
 
 # Add script to populate /home/ubuntu with default skeleton if necessary
 COPY populate_home.sh /usr/local/bin/populate_home.sh
