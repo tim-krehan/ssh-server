@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=24.04
+ARG BASE_IMAGE=26.04
 
 # Use the base image for code-server
 FROM ubuntu:${BASE_IMAGE}
