@@ -28,7 +28,7 @@ ARG PYTHON_VERSION=3.14.4
 # github-releases:starship/starship
 ARG STARSHIP_VERSION=1.25.1
 # github-releases:stern/stern
-ARG STERN_VERSION=1.33.1
+ARG STERN_VERSION=1.34.0
 # github-releases:hashicorp/terraform
 ARG TERRAFORM_VERSION=1.15.1
 # github-releases:terraform-linters/tflint
