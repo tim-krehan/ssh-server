@@ -12,7 +12,7 @@ ARG GIT_CREDENTIAL_OAUTH_VERSION=0.17.2
 # github-releases:golang/go
 ARG GOLANG_VERSION=1.24.4
 # github-releases:arttor/helmify
-ARG HELMIFY_VERSION=0.4.19
+ARG HELMIFY_VERSION=0.4.20
 # github-releases:derailed/k9s
 ARG K9S_VERSION=0.50.18
 # github-tags:kubernetes/kubectl
