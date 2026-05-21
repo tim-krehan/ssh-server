@@ -8,37 +8,37 @@ on:
 
 env:
   # Use docker.io for Docker Hub if empty
-  REGISTRY: git.kr-t.de
+  REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ forgejo.repository }}
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build_and_publish:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
         variant: [ "24.04", "26.04" ]
 
+    permissions:
+      contents: write # Required for tagging commits
+      packages: write
+      id-token: write # Required for GitHub Container Registry authentication
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
 
       - name: Log in to registry
-        if: ${{ forgejo.event_name != 'pull_request' }}
         uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ env.FORGEJO_REPOSITORY_OWNER }}
-          password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
-      
+          username: tim-krehan
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Get the current date for date-based versioning
         run: |
           DATE_VERSION=$(date +'%Y.%m')
-          echo "DATE_VERSION=${DATE_VERSION}" >> $FORGEJO_ENV
+          echo "DATE_VERSION=${DATE_VERSION}" >> $GITHUB_ENV
 
       - name: Check the count of released tags in the current month
         run: |
@@ -47,21 +47,23 @@ jobs:
           TAG_COUNT=$((TAG_COUNT + 1))
           NEW_VERSION=${DATE_VERSION}.${TAG_COUNT}
           echo "NEW_VERSION=${NEW_VERSION}"
-          echo "NEW_VERSION=${NEW_VERSION}" >> $FORGEJO_ENV
+          echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
-      - name: Build and push Docker image (Buildx)
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          build-args: |
-            BASE_IMAGE=${{ matrix.variant }}
-          push: ${{ forgejo.event_name != 'pull_request' }}
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-${{ matrix.variant }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NEW_VERSION }}-${{ matrix.variant }}
+      - name: Build Docker image
+        run: |
+          docker build . \
+            --build-arg BASE_IMAGE=${{ matrix.variant }}
+            --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-${{ matrix.variant }} \
+            --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NEW_VERSION }}-${{ matrix.variant }}
+
+      - name: Push Docker image
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-${{ matrix.variant }}
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NEW_VERSION }}-${{ matrix.variant }}
 
   tag_release:
-    if: ${{ forgejo.event_name != 'pull_request' }}
+    if: ${{ github.event_name != 'pull_request' }}
     needs: build_and_publish
     runs-on: ubuntu-24.04
 
@@ -74,7 +76,7 @@ jobs:
       - name: Get the current date for date-based versioning
         run: |
           DATE_VERSION=$(date +'%Y.%m')
-          echo "DATE_VERSION=${DATE_VERSION}" >> $FORGEJO_ENV
+          echo "DATE_VERSION=${DATE_VERSION}" >> $GITHUB_ENV
 
       - name: Check the count of released tags in the current month
         run: |
@@ -83,11 +85,11 @@ jobs:
           TAG_COUNT=$((TAG_COUNT + 1))
           NEW_VERSION=${DATE_VERSION}.${TAG_COUNT}
           echo "NEW_VERSION=${NEW_VERSION}"
-          echo "NEW_VERSION=${NEW_VERSION}" >> $FORGEJO_ENV
+          echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
       - name: Tag the current commit
         run: |
-          git config --global user.name "${{ forgejo.actor }}"
-          git config --global user.email "${{ forgejo.actor }}@git.kr-t.de"
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git tag -a "${{ env.NEW_VERSION }}" -m "Release ${{ env.NEW_VERSION }}"
           git push origin "${{ env.NEW_VERSION }}"
