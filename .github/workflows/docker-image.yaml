@@ -63,6 +63,10 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NEW_VERSION }}-${{ matrix.variant }}
 
   tag_release:
+  
+    permissions:
+      contents: write # Required for tagging commits
+
     if: ${{ github.event_name != 'pull_request' }}
     needs: build_and_publish
     runs-on: ubuntu-24.04
