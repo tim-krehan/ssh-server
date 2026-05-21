@@ -8,7 +8,7 @@ ARG ARGOCD_VERSION=3.4.2
 # github-releases:cli/cli
 ARG GHCLI_VERSION=2.92.0
 # github-releases:hickford/git-credential-oauth
-ARG GIT_CREDENTIAL_OAUTH_VERSION=0.17.2
+ARG GCO_VERSION=0.17.2
 # github-releases:golang/go
 ARG GOLANG_VERSION=1.24.4
 # github-releases:arttor/helmify
@@ -155,7 +155,7 @@ RUN set -eux; \
 
 # Install git-credential-oauth
 RUN set -eux; \
-    curl -fsSL https://github.com/hickford/git-credential-oauth/releases/download/v${GIT_CREDENTIAL_OAUTH_VERSION}/git-credential-oauth_${GIT_CREDENTIAL_OAUTH_VERSION}_linux_amd64.tar.gz | tar -xz -C /usr/local/bin/
+    curl -fsSL https://github.com/hickford/git-credential-oauth/releases/download/v${GCO_VERSION}/git-credential-oauth_${GCO_VERSION}_linux_amd64.tar.gz | tar -xz -C /usr/local/bin/
 
 # Ensure SSH runtime directory and proper configuration
 RUN mkdir -p /var/run/sshd && \
@@ -189,7 +189,7 @@ LABEL org.opencontainers.image.authors="Tim Krehan"
 LABEL org.opencontainers.image.description="Development environment for infrastructure-as-code with Go, Python, Kubernetes, Terraform, and related tools."
 LABEL ARGOCD_VERSION=${ARGOCD_VERSION} \
       GHCLI_VERSION=${GHCLI_VERSION} \
-      GIT_CREDENTIAL_OAUTH_VERSION=${GIT_CREDENTIAL_OAUTH_VERSION} \
+      GCO_VERSION=${GCO_VERSION} \
       GOLANG_VERSION=${GOLANG_VERSION} \
       HELMIFY_VERSION=${HELMIFY_VERSION} \
       K9S_VERSION=${K9S_VERSION} \
