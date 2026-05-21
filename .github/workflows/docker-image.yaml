@@ -52,7 +52,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build . \
-            --build-arg BASE_IMAGE=${{ matrix.variant }}
+            --build-arg BASE_IMAGE=${{ matrix.variant }} \
             --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-${{ matrix.variant }} \
             --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.NEW_VERSION }}-${{ matrix.variant }}
 
