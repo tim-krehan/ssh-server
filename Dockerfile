@@ -32,7 +32,7 @@ ARG STERN_VERSION=1.34.0
 # github-releases:hashicorp/terraform
 ARG TERRAFORM_VERSION=1.15.5
 # github-releases:terraform-linters/tflint
-ARG TFLINT_VERSION=0.63.0
+ARG TFLINT_VERSION=0.63.1
 # Install necessary tools for Dockerfile development and rootless Docker
 USER root
 
