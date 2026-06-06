@@ -14,7 +14,7 @@ ARG GOLANG_VERSION=1.24.4
 # github-releases:arttor/helmify
 ARG HELMIFY_VERSION=0.4.20
 # github-releases:derailed/k9s
-ARG K9S_VERSION=0.50.18
+ARG K9S_VERSION=0.51.0
 # github-tags:kubernetes/kubectl
 ARG KUBECTL_VERSION=1.34.2
 # github-releases:kubernetes-sigs/krew
