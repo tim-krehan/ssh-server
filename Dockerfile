@@ -6,7 +6,7 @@ FROM ubuntu:${BASE_IMAGE}
 # github-releases:argoproj/argo-cd
 ARG ARGOCD_VERSION=3.5.6
 # github-releases:cli/cli
-ARG GHCLI_VERSION=2.103.0
+ARG GHCLI_VERSION=2.103.2
 # github-releases:hickford/git-credential-oauth
 ARG GCO_VERSION=0.18.0
 # github-releases:golang/go
