@@ -30,7 +30,7 @@ ARG STARSHIP_VERSION=1.27.0
 # github-releases:stern/stern
 ARG STERN_VERSION=1.35.0
 # github-releases:hashicorp/terraform
-ARG TERRAFORM_VERSION=1.17.0
+ARG TERRAFORM_VERSION=1.17.1
 # github-releases:terraform-linters/tflint
 ARG TFLINT_VERSION=0.65.0
 # Install necessary tools for Dockerfile development and rootless Docker
