@@ -4,7 +4,7 @@ ARG BASE_IMAGE=26.04
 FROM ubuntu:${BASE_IMAGE}
 
 # github-releases:argoproj/argo-cd
-ARG ARGOCD_VERSION=3.5.6
+ARG ARGOCD_VERSION=3.5.7
 # github-releases:cli/cli
 ARG GHCLI_VERSION=2.103.3
 # github-releases:hickford/git-credential-oauth
